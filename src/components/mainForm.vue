@@ -99,6 +99,7 @@
 
                 this.bubbleHaveResult = false;
                 this.quickHaveResult = false;
+                this.cocktailHaveResult = false;
 
                 let maxItems = Math.round(this.$refs.vizContainer.clientWidth / (this.itemWidth + 2));
                 this.items = [];
@@ -207,13 +208,8 @@
             eraseVariables() {
 
                 this.bubbleLoading = false;
-                this.bubbleHaveResult = false;
-
                 this.quickLoading = false;
-                this.quickHaveResult = false;
-
                 this.cocktailLoading = false;
-                this.cocktailHaveResult = false;
 
                 if (compA > -1) this.setClassItem(compA, 'comp', true);
                 if (compB > -1) this.setClassItem(compB, 'comp', true);
