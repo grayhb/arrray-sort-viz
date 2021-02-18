@@ -29,10 +29,10 @@
 
                 </v-col>
                 <v-col>
-                    <v-btn small class="mx-2 mb-2" @click="createArray">Перемешать массив</v-btn>
-                    <v-btn small class="mx-2 mb-2" @click="bubbleSort">Пузырьковая сортировка</v-btn>
-                    <v-btn small class="mx-2 mb-2" @click="quickSort">Быстрая сортировка</v-btn>
-
+                    <v-btn small class="mx-2 mb-2" color="primary" @click="createArray" block>Перемешать массив</v-btn>
+                    <v-btn small class="mx-2 mb-2" @click="bubbleSort" block>Пузырьковая сортировка</v-btn>
+                    <v-btn small class="mx-2 mb-2" @click="quickSort" block>Шейкерная сортировка</v-btn>
+                    <v-btn small class="mx-2 mb-2" @click="quickSort" block>Быстрая сортировка</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -42,7 +42,9 @@
 
 <script>
 
+    import { bubbleSort } from '../helpers/bubbleSort'
     import { quickSort } from '../helpers/quickSort'
+    import { cocktailSort } from '../helpers/cocktailSort'
 
     var [compA, compB] = [-1,-1];   
     var [swapA, swapB] = [-1,-1];
@@ -57,17 +59,18 @@
 
                 bubbleLoading: false,
                 quickLoading: false,
+                cocktailLoading: false,
 
                 bubbleHaveResult: false,
                 quickHaveResult: false,
+                cocktailHaveResult: false,
             }
         },
         computed: {
             sorting() {
-                return this.bubbleLoading 
-                || this.quickLoading
-                || this.bubbleHaveResult
-                || this.quickHaveResult
+                return this.bubbleLoading || this.bubbleHaveResult
+                || this.quickLoading || this.quickHaveResult
+                || this.cocktailLoading || this.cocktailHaveResult
                 ;
             }
         },
@@ -78,8 +81,6 @@
         },
         watch: {
             itemWidth() {
-                this.bubbleLoading = false;
-                this.quickLoading = false;
                 this.createArray();
             }
         },
@@ -92,7 +93,6 @@
                 
                 this.createArray();
             },
-
             createArray() {
                 
                 this.eraseVariables();
@@ -111,7 +111,6 @@
 
                 this.$nextTick(this.setItemsHeight);
             }, 
-
             setItemsHeight() {
 
                 let k = 1;
@@ -140,13 +139,6 @@
 		            this.items[i] = temp;
 	            }
             },
-            test(){
-                //let item = document.getElementById('item_'+100);
-                //item.classList.add("selected");
-
-                //let item = this.$refs['item_'+i][0];
-                //item.style.backgroundColor = 'red';
-            },
             bubbleSort() {
                 
                 if (this.sorting)
@@ -154,30 +146,7 @@
 
                 this.bubbleLoading = true;
 
-                let animations = [];
-
-                let inputArr = this.items.map(e => e);
-                let len = inputArr.length;
-
-                for (let i = 0; i < len; i++) {
-                    for (let j = 0; j < len; j++) {
-
-                        const anim = {};
-                        anim.comp = [j, j + 1];
-
-                        if (inputArr[j] > inputArr[j + 1]) {
-
-                            let tmp = inputArr[j];
-                            inputArr[j] = inputArr[j + 1];
-                            inputArr[j + 1] = tmp;
-
-                            anim.swap = [j, j + 1];
-                        }
-
-                        animations.push(anim);
-
-                    }
-                }
+                let [result, animations] = bubbleSort(this.items.map(e => e));
 
                 this.bubbleHaveResult = true;
                 this.animate(animations, 0);
@@ -189,9 +158,21 @@
 
                 this.quickLoading = true;
 
-                var [result, animations] = quickSort(this.items.map(e => e));
+                let [result, animations] = quickSort(this.items.map(e => e));
 
                 this.quickHaveResult = true;
+                this.animate(animations, 0);
+            },
+            cocktailSort() {
+
+                 if (this.sorting)
+                    return;
+
+                this.cocktailLoading = true;
+
+                let [result, animations] = cocktailSort(this.items.map(e => e));
+
+                this.cocktailHaveResult = true;
                 this.animate(animations, 0);
             },
             animate(animations, animIndex) {
@@ -226,9 +207,13 @@
             eraseVariables() {
 
                 this.bubbleLoading = false;
+                this.bubbleHaveResult = false;
+
                 this.quickLoading = false;
+                this.quickHaveResult = false;
 
-
+                this.cocktailLoading = false;
+                this.cocktailHaveResult = false;
 
                 if (compA > -1) this.setClassItem(compA, 'comp', true);
                 if (compB > -1) this.setClassItem(compB, 'comp', true);
