@@ -1,5 +1,7 @@
 # array-sort-viz
 
+[Demo](https://grayhb.github.io/arrray-sort-viz/)
+
 ## Project setup
 ```
 npm install
