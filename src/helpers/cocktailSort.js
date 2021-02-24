@@ -1,9 +1,9 @@
-export function cocktailSort(items) {
+export function cocktailSort(arr) {
     
     let animations = [];
 
-    let left = firstSwap = 0;
-    let right = lastSwap = arr.length - 1;
+    let left = 0;
+    let right = arr.length - 1;
 
     while (left < right) {
         for (let i = left; i < right; i++) {
@@ -12,30 +12,32 @@ export function cocktailSort(items) {
             anim.comp = [i, i + 1];
 
             if (arr[i] > arr[i + 1]) {
-                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
                 anim.swap = [i, i + 1];
-                lastSwap = i;
+                swap(arr, i, i + 1);
             }
 
             animations.push(anim);
         }
-        
-        right = lastSwap;
+        right--;
         for (let i = right; i > left; i--) {
-           
+
             let anim = {};
             anim.comp = [i, i - 1];
 
             if (arr[i] < arr[i - 1]) {
-                [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]]
                 anim.swap = [i, i - 1];
-                firstSwap = i;
+                swap(arr, i, i - 1);
             }
 
             animations.push(anim);
         }
-        left = firstSwap;
+        left++;
     }
+    return [arr, animations];
+}
 
-    return [items, animations];
-};
+function swap(arr, i, j) {
+    let swap = arr[i];
+    arr[i] = arr[j];
+    arr[j] = swap;
+}

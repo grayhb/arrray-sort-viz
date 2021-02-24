@@ -31,7 +31,7 @@
                 <v-col>
                     <v-btn small class="mx-2 mb-2" color="primary" @click="createArray" block>Перемешать массив</v-btn>
                     <v-btn small class="mx-2 mb-2" @click="bubbleSort" block>Пузырьковая сортировка</v-btn>
-                    <v-btn small class="mx-2 mb-2" @click="quickSort" block>Шейкерная сортировка</v-btn>
+                    <v-btn small class="mx-2 mb-2" @click="cocktailSort" block>Шейкерная сортировка</v-btn>
                     <v-btn small class="mx-2 mb-2" @click="quickSort" block>Быстрая сортировка</v-btn>
                 </v-col>
             </v-row>
@@ -178,7 +178,7 @@
             },
             animate(animations, animIndex) {
                 
-                if (!this.bubbleLoading && !this.quickLoading) {
+                if (!this.bubbleLoading && !this.quickLoading && !this.cocktailLoading) {
                     this.eraseVariables();
                     return;
                 }
